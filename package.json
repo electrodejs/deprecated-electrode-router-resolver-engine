@@ -1,0 +1,21 @@
+{
+  "name": "@walmart/router-resolver-engine",
+  "version": "0.0.1",
+  "description": "A server side rendering engine using react-resolver and react-router",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://gecgithub01.walmart.com/thor/router-resolver-engine.git"
+  },
+  "homepage": "https://gecgithub01.walmart.com/thor/router-resolver-engine",
+  "author": "Jack Herrington <jherrington@walmartlabs.com>",
+  "license": "MIT",
+  "dependencies": {
+    "history": "^1.13.1",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-resolver": "^2.0.5",
+    "react-router": "^1.0.0"
+  }
+}
