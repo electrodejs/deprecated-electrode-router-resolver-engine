@@ -28,7 +28,10 @@ export default (routes) => {
                 });
               })
               .catch((error) => {
-                console.log(error);
+                resolve({
+                  status: 500,
+                  message: error.toString()
+                });
               })
           } else {
             resolve({
@@ -37,9 +40,11 @@ export default (routes) => {
             });
           }
         });
-      } catch(e) {
-        console.log(e);
-        console.log(e.stack);
+      } catch(error) {
+        resolve({
+          status: 500,
+          message: error.toString()
+        });
       }
     });
   };
