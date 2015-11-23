@@ -1,3 +1,4 @@
+import React from "react";
 import { renderToString } from "react-dom/server";
 import { match, RoutingContext } from "react-router";
 import { Resolver } from "react-resolver";
