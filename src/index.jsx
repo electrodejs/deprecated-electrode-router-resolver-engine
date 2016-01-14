@@ -3,10 +3,10 @@ import { renderToString } from "react-dom/server";
 import { match, RoutingContext } from "react-router";
 import { Resolver } from "react-resolver";
 
-class CookieContextWrapper extends React.Component {
+class HeaderContextWrapper extends React.Component {
   getChildContext() {
     return {
-      cookie: this.props.cookie
+      requestHeaders: this.props.requestHeaders
     };
   }
 
@@ -15,8 +15,8 @@ class CookieContextWrapper extends React.Component {
   }
 }
 
-CookieContextWrapper.childContextTypes = {
-  cookie: React.PropTypes.string
+HeaderContextWrapper.childContextTypes = {
+  requestHeaders: React.PropTypes.object
 };
 
 export default (routes) => {
@@ -38,9 +38,9 @@ export default (routes) => {
             Resolver
               .resolve(() => {
                 return (
-                  <CookieContextWrapper cookie={req.headers.cookie}>
+                  <HeaderContextWrapper requestHeaders={req.headers}>
                     <RoutingContext {...renderProps} />
-                  </CookieContextWrapper>
+                  </HeaderContextWrapper>
                 );
               })
               .then(({ Resolved, data }) => {
