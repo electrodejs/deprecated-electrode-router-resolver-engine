@@ -3,6 +3,22 @@ import { renderToString } from "react-dom/server";
 import { match, RoutingContext } from "react-router";
 import { Resolver } from "react-resolver";
 
+class CookieContextWrapper extends React.Component {
+  getChildContext() {
+    return {
+      cookie: this.props.cookie
+    };
+  }
+
+  render() {
+    return this.props.children
+  }
+}
+
+CookieContextWrapper.childContextTypes = {
+  cookie: React.PropTypes.string
+};
+
 export default (routes) => {
   return (req) => {
     return new Promise((resolve, reject) => {
@@ -20,7 +36,13 @@ export default (routes) => {
             });
           } else if (renderProps) {
             Resolver
-              .resolve(() => <RoutingContext {...renderProps} />)
+              .resolve(() => {
+                return (
+                  <CookieContextWrapper cookie={req.headers.cookie}>
+                    <RoutingContext {...renderProps} />
+                  </CookieContextWrapper>
+                );
+              })
               .then(({ Resolved, data }) => {
                 resolve({
                   status: 200,
