@@ -3,6 +3,22 @@ import { renderToString } from "react-dom/server";
 import { match, RoutingContext } from "react-router";
 import { Resolver } from "react-resolver";
 
+class HeaderContextWrapper extends React.Component {
+  getChildContext() {
+    return {
+      requestHeaders: this.props.requestHeaders
+    };
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
+
+HeaderContextWrapper.childContextTypes = {
+  requestHeaders: React.PropTypes.object
+};
+
 export default (routes) => {
   return (req) => {
     return new Promise((resolve, reject) => {
@@ -20,7 +36,13 @@ export default (routes) => {
             });
           } else if (renderProps) {
             Resolver
-              .resolve(() => <RoutingContext {...renderProps} />)
+              .resolve(() => {
+                return (
+                  <HeaderContextWrapper requestHeaders={req.headers}>
+                    <RoutingContext {...renderProps} />
+                  </HeaderContextWrapper>
+                );
+              })
               .then(({ Resolved, data }) => {
                 resolve({
                   status: 200,
