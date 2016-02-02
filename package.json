@@ -10,9 +10,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gecgithub01.walmart.com/thor/router-resolver-engine.git"
+    "url": "https://gecgithub01.walmart.com/electrode/router-resolver-engine.git"
   },
-  "homepage": "https://gecgithub01.walmart.com/thor/router-resolver-engine",
+  "homepage": "https://gecgithub01.walmart.com/electrode/router-resolver-engine",
   "author": "Jack Herrington <jherrington@walmartlabs.com>",
   "license": "MIT",
   "dependencies": {
