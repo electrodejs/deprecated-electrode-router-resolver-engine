@@ -2,6 +2,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { match, RoutingContext } from "react-router";
 import { Resolver } from "react-resolver";
+import Promise from "bluebird";
 
 class HeaderContextWrapper extends React.Component {
   getChildContext() {
@@ -19,56 +20,60 @@ HeaderContextWrapper.childContextTypes = {
   requestHeaders: React.PropTypes.object
 };
 
+
 export default (routes) => {
   return (req) => {
-    return new Promise((resolve, reject) => {
-      try {
-        match({ routes, location: req.url.path }, (error, redirectLocation, renderProps) => {
-          if (error) {
-            resolve({
-              status: 500,
-              message: error.message
-            });
-          } else if (redirectLocation) {
-            resolve({
+
+    const matchRoute = (resolve, reject) => {
+      const location = req.url.path;
+
+      match({routes, location}, (error, redirectLocation, renderProps) => {
+
+        if (error) {
+          return reject(error);
+        }
+
+        const response = () => {
+          if (redirectLocation) {
+
+            return {
               status: 302,
-              path: redirectLocation.pathname + redirectLocation.search
-            });
+              path: `${redirectLocation.pathname}${redirectLocation.search}`
+            };
+
           } else if (renderProps) {
-            Resolver
-              .resolve(() => {
-                return (
-                  <HeaderContextWrapper requestHeaders={req.headers}>
-                    <RoutingContext {...renderProps} />
-                  </HeaderContextWrapper>
-                );
-              })
-              .then(({ Resolved, data }) => {
-                resolve({
-                  status: 200,
-                  html: renderToString(<Resolved />),
-                  prefetch: `window.__REACT_RESOLVER_PAYLOAD__ = ${JSON.stringify(data)};`
-                });
-              })
-              .catch((error) => {
-                resolve({
-                  status: 500,
-                  message: error.toString()
-                });
-              })
-          } else {
-            resolve({
-              status: 404,
-              message: "Not found"
-            });
+
+            return Resolver.resolve(() => (
+                <HeaderContextWrapper requestHeaders={req.headers}>
+                  <RoutingContext {...renderProps} />
+                </HeaderContextWrapper>
+              ))
+              .then(({ Resolved, data }) => ({
+                status: 200,
+                html: renderToString(<Resolved />),
+                prefetch: `window.__REACT_RESOLVER_PAYLOAD__ = ${JSON.stringify(data)};`
+              }));
+
           }
-        });
-      } catch(error) {
-        resolve({
+
+          return {
+            status: 404,
+            message: `router-resolver: Path ${location} not found`
+          };
+        };
+
+        resolve(response());
+
+      });
+    };
+
+    return new Promise(matchRoute)
+      .catch((error) => {
+        return {
           status: 500,
-          message: error.toString()
-        });
-      }
-    });
+          message: error.message
+        };
+      });
+
   };
 };
