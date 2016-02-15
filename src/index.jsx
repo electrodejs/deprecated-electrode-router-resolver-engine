@@ -7,7 +7,9 @@ import Promise from "bluebird";
 class HeaderContextWrapper extends React.Component {
   getChildContext() {
     return {
-      requestHeaders: this.props.requestHeaders
+      requestHeaders: this.props.requestHeaders,
+      requestUrl: this.props.requestUrl,
+      requestParams: this.props.requestParams
     };
   }
 
@@ -17,9 +19,10 @@ class HeaderContextWrapper extends React.Component {
 }
 
 HeaderContextWrapper.childContextTypes = {
-  requestHeaders: React.PropTypes.object
+  requestHeaders: React.PropTypes.object,
+  requestUrl: React.PropTypes.object,
+  requestParams: React.PropTypes.object
 };
-
 
 export default (routes) => {
   return (req) => {
@@ -44,7 +47,7 @@ export default (routes) => {
           } else if (renderProps) {
 
             return Resolver.resolve(() => (
-                <HeaderContextWrapper requestHeaders={req.headers}>
+                <HeaderContextWrapper requestHeaders={req.headers} requestUrl={req.url} requestParams={req.params}>
                   <RoutingContext {...renderProps} />
                 </HeaderContextWrapper>
               ))
