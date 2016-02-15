@@ -9,7 +9,8 @@ class HeaderContextWrapper extends React.Component {
     return {
       requestHeaders: this.props.requestHeaders,
       requestUrl: this.props.requestUrl,
-      requestParams: this.props.requestParams
+      requestPathParams: this.props.requestPathParams,
+      requestQryParams: this.props.requestQryParams
     };
   }
 
@@ -21,7 +22,8 @@ class HeaderContextWrapper extends React.Component {
 HeaderContextWrapper.childContextTypes = {
   requestHeaders: React.PropTypes.object,
   requestUrl: React.PropTypes.object,
-  requestParams: React.PropTypes.object
+  requestPathParams: React.PropTypes.object,
+  requestQryParams: React.PropTypes.object
 };
 
 export default (routes) => {
@@ -47,7 +49,11 @@ export default (routes) => {
           } else if (renderProps) {
 
             return Resolver.resolve(() => (
-                <HeaderContextWrapper requestHeaders={req.headers} requestUrl={req.url} requestParams={req.params}>
+                <HeaderContextWrapper
+                  requestHeaders={req.headers}
+                  requestUrl={req.url}
+                  requestPathParams={renderProps.params}
+                  requestQryParams={req.query}>
                   <RoutingContext {...renderProps} />
                 </HeaderContextWrapper>
               ))
