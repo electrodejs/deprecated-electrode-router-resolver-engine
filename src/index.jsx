@@ -1,3 +1,12 @@
+/*
+ *
+ * This file is no longer used for generating the compiled code.
+ *
+ * The actual code is now written directly as lib/index.js and this file is kept
+ * as a reference.
+ *
+ */
+
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { match, RoutingContext } from "react-router";

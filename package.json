@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "builder run test",
-    "compile": "node_modules/babel-cli/bin/babel.js src --out-dir lib",
-    "prepublish": "npm run compile"
+    "coverage": "builder run check",
+    "compile": "node_modules/babel-cli/bin/babel.js src --out-dir dist"
   },
   "repository": {
     "type": "git",
