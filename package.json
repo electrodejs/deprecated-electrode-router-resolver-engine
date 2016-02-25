@@ -5,8 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "builder run test",
-    "coverage": "builder run check",
-    "compile": "node_modules/babel-cli/bin/babel.js src --out-dir dist"
+    "coverage": "builder run check"
   },
   "repository": {
     "type": "git",
@@ -16,6 +15,7 @@
   "author": "Jack Herrington <jherrington@walmartlabs.com>",
   "license": "MIT",
   "dependencies": {
+    "babel-register": "^6.5.2",
     "bluebird": "^2.10.2",
     "history": "^1.13.1",
     "react": "^0.14.3",

@@ -3,7 +3,9 @@
 
 const routerResolver = require("../../lib/index");
 
-require("babel-core/register");
+require("babel-register");
+
+const createStore = require("redux").createStore;
 
 const routes = require("../routes.jsx").default;
 const badRoutes = require("../bad-routes.jsx").default;
@@ -38,6 +40,19 @@ describe("RouterResolver", function () {
     const resolver = routerResolver(routes);
     return resolver({url: {path: "/test"}}).then((result) => {
       expect(result.status).to.equal(200);
+    });
+  });
+
+  it("should bootstrap a redux store if redux option is passed in", () => {
+    const resolver = routerResolver(routes, {
+      redux: {
+        storeInitializer: () => createStore((state) => state, ["Use Redux"])
+      }
+    });
+
+    return resolver({url: {path: "/test"}}).then((result) => {
+      console.log(result.prefetch);
+      expect(result.prefetch).to.contain(`window.__WML_REDUX_INITIAL_STATE__ = ["Use Redux"];`);
     });
   });
 
