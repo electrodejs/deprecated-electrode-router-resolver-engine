@@ -11,7 +11,9 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { match, RoutingContext } from "react-router";
 import { Resolver } from "react-resolver";
+import { Provider } from 'react-redux'
 import Promise from "bluebird";
+
 
 class HeaderContextWrapper extends React.Component {
   getChildContext() {
@@ -35,9 +37,8 @@ HeaderContextWrapper.childContextTypes = {
   requestQryParams: React.PropTypes.object
 };
 
-export default (routes) => {
+export default (routes, options) => {
   return (req) => {
-
     const matchRoute = (resolve, reject) => {
       const location = req.url.path;
 
@@ -56,22 +57,45 @@ export default (routes) => {
             };
 
           } else if (renderProps) {
+            let store;
 
-            return Resolver.resolve(() => (
+            return Resolver.resolve(() => {
+              if (options.redux && options.redux.storeInitializer) {
+                store = options.redux.storeInitializer(req);
+              };
+
+              return (
                 <HeaderContextWrapper
                   requestHeaders={req.headers}
                   requestUrl={req.url}
                   requestPathParams={renderProps.params}
-                  requestQryParams={req.query}>
-                  <RoutingContext {...renderProps} />
+                  requestQryParams={req.query}
+                >
+                  {store ?
+                    <Provider store={store}>
+                      <RoutingContext {...renderProps} />
+                    </Provider>
+                  :
+                    <RoutingContext {...renderProps} />
+                  }
                 </HeaderContextWrapper>
-              ))
-              .then(({ Resolved, data }) => ({
+              );
+            })
+            .then(({ Resolved, data }) => {
+              let prefetch = `window.__REACT_RESOLVER_PAYLOAD__ = ${JSON.stringify(data)};`;
+
+              if (store && store.getState) {
+                const storeState = store.getState();
+
+                prefetch += `window.__WML_REDUX_INITIAL_STATE__ = ${JSON.stringify(storeState)};`;
+              }
+
+              return {
                 status: 200,
                 html: renderToString(<Resolved />),
-                prefetch: `window.__REACT_RESOLVER_PAYLOAD__ = ${JSON.stringify(data)};`
-              }));
-
+                prefetch: prefetch
+              }
+            });
           }
 
           return {

@@ -20,8 +20,10 @@
     "history": "^1.13.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
+    "react-redux": "^4.4.0",
     "react-resolver": "^2.0.5",
-    "react-router": "^1.0.0"
+    "react-router": "^1.0.0",
+    "redux": "^3.3.1"
   },
   "devDependencies": {
     "@walmart/electrode-archetype-hapi-plugin-dev": "^2.0.3",
