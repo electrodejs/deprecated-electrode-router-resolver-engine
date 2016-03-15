@@ -9,6 +9,7 @@ const createStore = require("redux").createStore;
 
 const routes = require("../routes.jsx").default;
 const badRoutes = require("../bad-routes.jsx").default;
+const errorRoutes = require("../error-routes.jsx").default;
 const getIndexRoutes = require("../get-index-routes.jsx").default;
 const ErrorRoute = require("../get-index-routes.jsx").ErrorRoute;
 
@@ -72,5 +73,12 @@ describe("RouterResolver", function () {
     });
   });
 
+  it("should return 404 if component throws 404", () => {
+    const resolver = routerResolver(errorRoutes);
+    return resolver({url: {path: "/"}}).then((result) => {
+      expect(result.status).to.equal(404);
+      expect(result._err).to.be.ok;
+    });
+  });
 
 });
