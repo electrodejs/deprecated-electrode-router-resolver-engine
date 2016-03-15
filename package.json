@@ -1,6 +1,6 @@
 {
   "name": "@walmart/router-resolver-engine",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A server side rendering engine using react-resolver and react-router",
   "main": "lib/index.js",
   "scripts": {
