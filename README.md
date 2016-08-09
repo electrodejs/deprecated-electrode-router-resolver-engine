@@ -6,7 +6,7 @@ A server side routing engine that uses `react-router` and `react-resolver` for S
 Example:
 
 ```
-import resolverEngine from "@walmart/router-resolver-engine";
+import resolverEngine from "electrode-router-resolver-engine";
 import routes from "../../client/routes";
 
 ...
