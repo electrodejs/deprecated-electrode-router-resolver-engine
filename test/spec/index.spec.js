@@ -1,6 +1,6 @@
 "use strict";
 
-
+const Promise = require("bluebird");
 const routerResolver = require("../../lib/index");
 
 require("babel-register");
@@ -54,6 +54,33 @@ describe("RouterResolver", function () {
     return resolver({url: {path: "/test"}}).then((result) => {
       console.log(result.prefetch);
       expect(result.prefetch).to.contain(`window.__WML_REDUX_INITIAL_STATE__ = ["Use Redux"];`);
+    });
+  });
+
+  it("should bootstrap a redux store if redux option is passed in as a promise", () => {
+    const resolver = routerResolver(routes, {
+      redux: {
+        storeInitializer: () => Promise.resolve(createStore((state) => state, ["Use Redux from Promise"]))
+      }
+    });
+
+    return resolver({url: {path: "/test"}}).then((result) => {
+      console.log(result.prefetch);
+      expect(result.prefetch).to.contain(`window.__WML_REDUX_INITIAL_STATE__ = ["Use Redux from Promise"];`);
+    });
+  });
+
+  it("should encode script tags in the redux store when encodePreloadedData is true", () => {
+    const resolver = routerResolver(routes, {
+      redux: {
+        storeInitializer: () => Promise.resolve(createStore((state) => state, ["<script>Use Redux</script><script></script>"]))
+      },
+      encodePreloadedData: true
+    });
+
+    return resolver({url: {path: "/test"}}).then((result) => {
+      expect(result.prefetch).to.contain(`window.__WML_REDUX_INITIAL_STATE__ = ["%3Cscript>Use Redux%3C%2Fscript%3E%3Cscript>%3C%2Fscript%3E"];`);
+      expect(decodeURIComponent(result.prefetch)).to.contain(`window.__WML_REDUX_INITIAL_STATE__ = ["<script>Use Redux</script><script></script>"]`);
     });
   });
 
