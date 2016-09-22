@@ -1,5 +1,6 @@
-Router Resolver Engine
-======================
+# Electrode Router Resolver Engine
+
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 
 A server side routing engine that uses `react-router` and `react-resolver` for SSR and pre-fetch data.
 
@@ -26,3 +27,10 @@ export default {
   }
 };
 ```
+
+[npm-image]: https://badge.fury.io/js/electrode-router-resolver-engine.svg
+[npm-url]: https://npmjs.org/package/electrode-router-resolver-engine
+[travis-image]: https://travis-ci.org/electrode-io/electrode-router-resolver-engine.svg?branch=master
+[travis-url]: https://travis-ci.org/electrode-io/electrode-router-resolver-engine
+[daviddm-image]: https://david-dm.org/electrode-io/electrode-router-resolver-engine.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/electrode-io/electrode-router-resolver-engine
