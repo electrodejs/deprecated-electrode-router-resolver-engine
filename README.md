@@ -28,6 +28,8 @@ export default {
 };
 ```
 
+Built with :heart: by [Team Electrode](https://github.com/orgs/electrode-io/people) @WalmartLabs.
+
 [npm-image]: https://badge.fury.io/js/electrode-router-resolver-engine.svg
 [npm-url]: https://npmjs.org/package/electrode-router-resolver-engine
 [travis-image]: https://travis-ci.org/electrode-io/electrode-router-resolver-engine.svg?branch=master
